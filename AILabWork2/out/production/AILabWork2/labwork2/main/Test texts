@@ -1,0 +1,86 @@
+DFS:
+
+public class DFSImplementation {
+
+    HashMap<Node, Integer> tallinConnections = new HashMap<>();
+    HashMap<Node, Integer> spbConnections = new HashMap<>();
+    HashMap<Node, Integer> helsinkiConnections = new HashMap<>();
+    HashMap<Node, Integer> rigaConnections = new HashMap<>();
+    HashMap<Node, Integer> tverConnections = new HashMap<>();
+    HashMap<Node, Integer> moscowConnections = new HashMap<>();
+
+
+    Node tallin = new Node("Tallin", tallinConnections);
+    Node spb = new Node("SPb", spbConnections);
+    Node helsinki = new Node("Helsinki", helsinkiConnections);
+    Node riga = new Node("Riga", rigaConnections);
+    Node tver = new Node("Tver", tverConnections);
+    Node moscow = new Node("Moscow", moscowConnections);
+
+    Stack<Node> visitedNodes = new Stack<>();
+    List<Node> listOfNodes = Arrays.asList(tallin, spb, helsinki, riga, tver, moscow);
+
+
+
+
+    public void runDFS() {
+
+        tallinConnections.put(spb, 313);
+        tallinConnections.put(helsinki, 100);
+        tallinConnections.put(riga, 276);
+
+        helsinkiConnections.put(spb, 295);
+        helsinkiConnections.put(riga, 377);
+        helsinkiConnections.put(tallin, 100);
+
+        rigaConnections.put(spb, 476);
+        rigaConnections.put(tallin, 276);
+        rigaConnections.put(helsinki, 377);
+        rigaConnections.put(tver, 716);
+        rigaConnections.put(moscow, 839);
+
+        spbConnections.put(helsinki, 295);
+        spbConnections.put(tallin, 313);
+        spbConnections.put(riga, 476);
+        spbConnections.put(tver, 483);
+
+        tverConnections.put(spb, 483);
+        tverConnections.put(riga, 716);
+        tverConnections.put(moscow, 161);
+
+        moscowConnections.put(tver, 161);
+        moscowConnections.put(riga, 839);
+
+
+        visitedNodes.push(tallin);
+        /*
+        for (Node node : visitedNodes.peek().getConnections().keySet()) {
+            System.out.println(node.getName());
+        }
+        */
+        runIteration();
+    }
+
+    public void runIteration() {
+        for (Node node : visitedNodes.peek().getConnections().keySet()) {
+            if (!node.getName().equals("Moscow")) {
+                if ((!node.isClosed()) && (visitedNodes.search(node) == -1)) {
+                    visitedNodes.push(node);
+                    System.out.println("Entered " + node.getName());
+                    node.setClosed(true);
+                    runIteration();
+                    System.out.println("Left " + node.getName());
+                    node.setClosed(false);
+                }
+            } else {
+                System.out.println("Entered Moscow.");
+                System.out.println("Path found!");
+                System.exit(0);
+            }
+
+
+        }
+        visitedNodes.pop().setClosed(true);
+    }
+
+}
